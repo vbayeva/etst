@@ -22,6 +22,7 @@ async def bark(ctx):
 async def bye(ctx):
     await ctx.send("Papa")
 
+# tu jest nowa komenda 
 
 @bot.command()
 async def genpass(ctx):
