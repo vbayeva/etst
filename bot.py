@@ -1,25 +1,31 @@
 import discord
+from discord.ext import commands
 
-# Zmienna intencje przechowuje uprawnienia bota
 intents = discord.Intents.default()
-# Włączanie uprawnienia do czytania wiadomości
 intents.message_content = True
-# Tworzenie bota w zmiennej klienta i przekazanie mu uprawnień
-client = discord.Client(intents=intents)
 
-@client.event
+bot = commands.Bot(command_prefix='#', intents=intents)
+
+@bot.event
 async def on_ready():
-    print(f'Zalogowaliśmy się jako {client.user}')
+    print(f'Zalogowaliśmy się jako {bot.user}')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$hello'):
-        await message.channel.send("Cześć!")
-    elif message.content.startswith('$bye'):
-        await message.channel.send("\\U0001f642")
-    else:
-        await message.channel.send(message.content)
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Cześć, ty jestes {ctx.message.author}!')
 
-client.run("MTIwNzM3OTUwOTI1NTQ3MTE4NQ.GCwp8C.Rmn0y2pwnN8A40qzsubjuBI6aNWdYU7Xt6grYQ")
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+@bot.command()
+async def joined(ctx, member: discord.Member):
+    """Says when a member joined."""
+    await ctx.send(f'{member.name} joined {discord.utils.format_dt(member.joined_at)}')
+
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
+
+bot.run("TOKEN")
